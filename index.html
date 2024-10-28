@@ -103,26 +103,27 @@
   <div class="message-box" id="messageBox">
     <h2>🎅 Psst... Guess Who? 🎅</h2>
     <p>Hello again! I bet you're still trying to guess who I am. I got bored of just sending you basic notes so I decided to add a little pizzazz 🤌. Just when you think you know, I’ll keep you on your toes! 😏<br><br>
-    Remember, I’m watching, and I know more than you think! See you again same time thursday🥸... 🎄</p>
+    Remember, I’m watching, and I know more than you think! See you again same time Thursday 🥸... 🎄</p>
     <p class="signature">Your *totally mysterious* Secret Santa 🧝‍♀️ *********E*******️</p>
   </div>
 
   <script>
-    // Create falling letters with "Shemaiah, Samuel, Raphael" hidden in them
+    // Create falling letters with "Shemaiah" revealed at a specific moment
     const lettersContainer = document.getElementById('letters-container');
     const messageBox = document.getElementById('messageBox');
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const name = 'Shemaiah';
-    const numLetters = 30;
+    const numLetters = 100; // Total letters to generate
+    const namePosition = 30; // Position to show the name
 
-    // Create random letters including "Shemaiah"
+    // Create random letters
     for (let i = 0; i < numLetters; i++) {
       const letter = document.createElement('span');
       letter.classList.add('letter');
 
-      // Randomly decide whether to include a letter from "Shemaiah"
-      if (Math.random() < 0.1 && i === Math.floor(numLetters / 2)) { // 10% chance to show "Shemaiah" at the halfway point
-        letter.textContent = name[i % name.length]; // Display letters of "Shemaiah"
+      // Show "Shemaiah" at a specific position
+      if (i >= namePosition && i < namePosition + name.length) {
+        letter.textContent = name.charAt(i - namePosition); // Show the letters of "Shemaiah"
       } else {
         letter.textContent = letters[Math.floor(Math.random() * letters.length)];
       }
@@ -135,7 +136,7 @@
     // Show message after animation
     setTimeout(() => {
       messageBox.classList.add('show');
-    }, 3000); // Adjust this time to control when the message appears
+    }, 5000); // Adjust this time to control when the message appears
   </script>
 
 </body>
