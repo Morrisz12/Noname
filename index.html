@@ -2,142 +2,284 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secret Santa Message</title>
+  <title>Alicia, Will You Be My Valentine?</title>
   <style>
-    /* Basic Page Setup */
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Animated, lovey background */
     body {
-      font-family: 'Georgia', serif;
-      background: #f4f0e6;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       overflow: hidden;
-      margin: 0;
-      padding: 20px; /* Add padding for smaller screens */
-    }
-
-    /* Message Box */
-    .message-box {
-      background: #fffbe9;
-      border: 3px dashed #d4af37;
-      padding: 25px 35px;
-      max-width: 100%; /* Make it responsive */
-      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-      border-radius: 10px;
-      text-align: center;
       position: relative;
-      display: none; /* Hidden initially for animation */
-      overflow: hidden; /* Prevent overflow */
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ff9a9e, #fad0c4);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
     }
-
-    /* Heading */
-    h2 {
-      color: #d62828;
-      margin-bottom: 10px;
-      font-size: 1.6em; /* Adjust font size */
+    
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-
-    /* Message Text */
-    p {
-      font-size: 1em; /* Make font size responsive */
-      line-height: 1.4;
-      color: #4a4a4a;
-      margin: 0 0 20px;
+    
+    /* Heading styling */
+    h1 {
+      font-size: 2.5em;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 50px;
+      text-align: center;
+      z-index: 2;
     }
-
-    /* Signature */
-    .signature {
-      margin-top: 15px;
-      font-style: italic;
-      color: #d62828;
+    
+    /* Button styling */
+    button {
+      font-size: 1.5em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 2;
     }
-
-    /* Letter Animation */
-    .letter {
-      font-size: 2em;
-      color: #d62828;
+    
+    #yesBtn {
+      background-color: #ff6f61;
+      color: #fff;
+    }
+    #yesBtn:hover {
+      background-color: #ff8a80;
+    }
+    #noBtn {
+      background-color: #fff;
+      color: #ff6f61;
       position: absolute;
-      top: -50px;
-      animation: fall 3s ease-in forwards;
+      left: 50%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+    #noBtn:hover {
+      background-color: #ffe6e1;
+    }
+    
+    /* Dynamic background hearts */
+    .heart {
+      position: absolute;
+      font-size: 2em;
+      color: rgba(255, 255, 255, 0.8);
+      animation: float 6s ease-in-out infinite;
+      z-index: 1;
+    }
+    
+    @keyframes float {
+      0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+      25%  { transform: translate(10px, -10px) scale(1.1); opacity: 0.8; }
+      50%  { transform: translate(-10px, 10px) scale(1.2); opacity: 0.7; }
+      75%  { transform: translate(10px, 10px) scale(1.1); opacity: 0.8; }
+      100% { transform: translate(0, 0) scale(1); opacity: 1; }
+    }
+    
+    /* Signature styling */
+    #signature {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 1.2em;
+      color: #fff;
+      font-family: 'Lucida Handwriting', cursive;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+    
+    /* Heart Explosion Overlay */
+    #heartOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 3;
+      display: none; /* Hidden until triggered */
+    }
+    
+    .explodingHeart {
+      position: absolute;
+      font-size: 24px;
+      color: #fff;
+      opacity: 1;
+      animation: explode 2s forwards;
+    }
+    
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(2);
+        opacity: 0;
+      }
+    }
+    
+    /* Love Message Styling - fades in and then stays */
+    #loveMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       opacity: 0;
+      animation: fadeIn 2s forwards;
     }
-
-    @keyframes fall {
-      0% { opacity: 0; transform: translateY(-100px) rotate(0deg); }
-      70% { opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
-
-    /* Reveal Message After Animation */
-    @keyframes revealMessage {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .message-box.show {
-      display: block;
-      animation: revealMessage 1s ease-in-out forwards;
-    }
-
-    /* Responsive Font Sizes */
-    @media (max-width: 600px) {
-      .letter {
-        font-size: 1.5em; /* Adjust letter size for mobile */
-      }
-      h2 {
-        font-size: 1.4em; /* Adjust heading size for mobile */
-      }
-      p {
-        font-size: 0.9em; /* Adjust paragraph size for mobile */
-      }
+    
+    /* Hide the audio element */
+    audio {
+      display: none;
     }
   </style>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // Initialize EmailJS with your user ID (replace with your actual user ID)
+      emailjs.init("YOUR_USER_ID");
+    })();
+  </script>
 </head>
 <body>
-
-  <!-- Falling Letters Animation -->
-  <div id="letters-container"></div>
-
-  <!-- Message Box -->
-  <div class="message-box" id="messageBox">
-    <h2>🎅 Psst... Guess Who? 🎅</h2>
-    <p>Hello again! I bet you're still trying to guess who I am. I got bored of just sending you basic notes so I decided to add a little pizzazz 🤌. Just when you think you know, I’ll keep you on your toes! 😏<br><br>
-    Remember, I’m watching, and I know more than you think! See you again same time Thursday 🥸... 🎄</p>
-    <p class="signature">Your *totally mysterious* Secret Santa 🧝‍♀️ *********E*******️</p>
-  </div>
-
+  <h1>Alicia, will you be my valentine? &#10084;</h1>
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+  
+  <!-- Dynamic Background Hearts -->
+  <div class="heart" style="top: 10%; left: 20%; animation-duration: 8s;">&#10084;</div>
+  <div class="heart" style="top: 30%; left: 80%; animation-duration: 7s;">&#10084;</div>
+  <div class="heart" style="top: 50%; left: 10%; animation-duration: 9s;">&#10084;</div>
+  <div class="heart" style="top: 70%; left: 50%; animation-duration: 10s;">&#10084;</div>
+  <div class="heart" style="top: 20%; left: 60%; animation-duration: 8s;">&#10084;</div>
+  <div class="heart" style="top: 80%; left: 30%; animation-duration: 7s;">&#10084;</div>
+  
+  <!-- Signature -->
+  <div id="signature">love Shemaiah &#10084;</div>
+  
+  <!-- Background Music (replace "love-song.mp3" with your music file path) -->
+  <audio id="bgMusic" loop>
+    <source src="love-song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <!-- Heart Explosion Overlay -->
+  <div id="heartOverlay"></div>
+  
   <script>
-    // Create falling letters with "Shemaiah" revealed at a specific moment
-    const lettersContainer = document.getElementById('letters-container');
-    const messageBox = document.getElementById('messageBox');
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const name = 'Shemaiah';
-    const numLetters = 100; // Total letters to generate
-    const namePosition = 30; // Position to show the name
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
 
-    // Create random letters
-    for (let i = 0; i < numLetters; i++) {
-      const letter = document.createElement('span');
-      letter.classList.add('letter');
-
-      // Show "Shemaiah" at a specific position
-      if (i >= namePosition && i < namePosition + name.length) {
-        letter.textContent = name.charAt(i - namePosition); // Show the letters of "Shemaiah"
-      } else {
-        letter.textContent = letters[Math.floor(Math.random() * letters.length)];
-      }
-
-      letter.style.left = Math.random() * 100 + 'vw';
-      letter.style.animationDelay = Math.random() * 2 + 's';
-      lettersContainer.appendChild(letter);
+    // Function to move the "No" button randomly
+    function moveNoButton() {
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      noBtn.style.left = randomX + 'px';
+      noBtn.style.top = randomY + 'px';
     }
 
-    // Show message after animation
-    setTimeout(() => {
-      messageBox.classList.add('show');
-    }, 5000); // Adjust this time to control when the message appears
-  </script>
+    // Make the "No" button elusive!
+    noBtn.addEventListener('mouseover', moveNoButton);
+    noBtn.addEventListener('click', moveNoButton);
 
+    // Function to create the heart explosion and display a permanent love message
+    function startHeartExplosion() {
+      const heartOverlay = document.getElementById('heartOverlay');
+      heartOverlay.style.display = 'block';
+      
+      // Create and add the love message (this one stays on screen)
+      const loveMessage = document.createElement('div');
+      loveMessage.id = "loveMessage";
+      loveMessage.innerHTML = "Yeah, that's what I thought! Love you, babe 🤍🤍 xo Shemaiah";
+      heartOverlay.appendChild(loveMessage);
+      
+      // Create many heart elements that burst from the center
+      const heartCount = 100;
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('explodingHeart');
+        heart.innerHTML = "&#10084;";
+        // Start at the center of the viewport
+        heart.style.left = (window.innerWidth / 2) + "px";
+        heart.style.top  = (window.innerHeight / 2) + "px";
+        // Random translation values between -200px and 200px
+        const randomX = (Math.random() * 400 - 200) + "px";
+        const randomY = (Math.random() * 400 - 200) + "px";
+        heart.style.setProperty('--tx', randomX);
+        heart.style.setProperty('--ty', randomY);
+        // A slight random delay for a dynamic effect
+        heart.style.animationDelay = (Math.random() * 0.5) + "s";
+        heartOverlay.appendChild(heart);
+      }
+      
+      // After 3 seconds, remove only the exploding hearts, leaving the love message visible
+      setTimeout(() => {
+        const hearts = heartOverlay.querySelectorAll('.explodingHeart');
+        hearts.forEach(heart => heart.remove());
+      }, 3000);
+    }
+
+    // Function to send an email notification using EmailJS
+    function sendEmailNotification() {
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        // Pass template parameters
+        to_email: "shakeilmorris@gmail.com",
+        subject: "Valentine Accepted!",
+        message: "Alicia just clicked 'Yes' on your Valentine page!"
+      })
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+      }, (error) => {
+        console.log('FAILED...', error);
+      });
+    }
+
+    // On clicking "Yes", hide the original elements, start the music, trigger the heart explosion,
+    // and send an email notification.
+    yesBtn.addEventListener('click', () => {
+      document.querySelector('h1').style.display = 'none';
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+      
+      // Start background music
+      const bgMusic = document.getElementById('bgMusic');
+      bgMusic.play();
+      
+      // Trigger heart explosion with a permanent love message
+      startHeartExplosion();
+      
+      // Send the email notification
+      sendEmailNotification();
+    });
+  </script>
 </body>
 </html>
